@@ -1,0 +1,153 @@
+
+{% extends 'base.html' %}
+{% block title %} Login Page - Create Account {% endblock %}
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <title></title> -->
+  <style type="text/css">
+  /*Start Global Style*/
+  *{
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+  }
+  body{
+      background: linear-gradient(45deg, mediumpurple, skyblue);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height:100vh;
+      font-family: sans-serif;
+  }
+  .container{
+      width: 80%;
+      margin: auto;
+      padding: 20px;
+      height:100%;
+      /*background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(0.9rem);*/
+  }
+
+  .login ,.register{width: 50%}
+
+  /*Start Login Style*/
+  .login{
+      float:left;
+      background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(0.9rem);
+      height: 100%;
+      border-radius: 10px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      text-align: center;
+      padding-top: 100px;
+  }
+  .login h1{
+      margin-bottom: 40px;
+      font-size: 2.5em;
+  }
+
+  input[type="email"] , input[type="password"], input[type="number"], input[type="text"], select{
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 30px;
+      border: none;
+      border-radius: 0.5rem;
+      color: black;
+      background: transparent;
+    box-shadow: 0 0 1rem 1rem rgba(0, 0, 0, 0.1);
+
+/*      background-color: #eeeeef;*/
+  }
+  input[type="checkbox"]{
+      float: left;
+      margin-right: 5px;
+  }
+  .login span{
+      float: left
+  }
+  .login a{
+      float: right;
+      text-decoration: none;
+      color: #000;
+      transition: 0.3s all ease-in-out;
+  }
+  .login a:hover{color: #11d9c7ad;font-weight: bold}
+  .login button{
+      width: 100%;
+      margin: 30px 0;
+      padding: 10px;
+      border: none;
+      background-color: black;
+      border-radius: 20pc;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      transition: 0.3s all ease-in-out;
+  }
+  .login button:hover{
+      width:97%;
+      font-size: 22px;
+      
+  }
+  .login hr{
+      width: 30%;
+      display: inline-block
+  }
+
+  .login p{
+      display: inline-block;
+      margin: 0px 10px 30px;
+  }
+  .login ul{
+      list-style: none;
+      margin-bottom:40px;  
+  }
+  .login ul li{
+      display: inline-block;
+      margin-right: 30px;
+      cursor: pointer;
+  }
+  .login ul li:hover{opacity: 0.6}
+  .login ul li:last-child{margin-right: 0}
+  .login .copyright{
+      display: inline-block;
+      float: none;
+  }
+  @media screen and (max-width: 600px) {
+      .login{
+        width: 100%;
+      }
+      /* Add more styles specific to smaller screens as needed */
+  }
+</style>
+</head>
+<body>
+
+  <div class="container">
+        <div class="login" style="height: 80%;">
+           <div class="container">
+                <h1>Login to IMCMT</h1>
+                <form class="sig-form" action="/login" method="POST">
+                  <input type="email" name="email" placeholder="Your Email">
+                  <input type="password" name="password" placeholder="Your Password"><br>
+                  <button type="sumbit">Login</button>
+                </form>
+                <div class="clearfix"></div> 
+                <br>
+                <br>
+                <p><a href="/verify-church-passkey" style="text-decoration: underline; color: blue;">Create Account!</a></p>
+           </div>
+           
+        </div>
+      </div>
+</body>
+</html>
+
+{% endblock %}
+    

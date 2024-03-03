@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+{% block title %} Dashboard - {{ CurrentUser['name'] }} {% endblock %}
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard-style.css') }}">
+	<!-- <title></title> -->
+	<style type="text/css">
+		:root{
+			--{{ AppThemeOpposite }}-shadow: rgba(255, 255, 255, 0.05);
+			--{{ AppThemeOpposite }}-bg: #062239f7;
+			--{{ AppThemeOpposite }}-text: #efe9e9;
+			--{{ AppThemeOpposite }}-box-bg: #4c5f72;
+
+			--{{ AppTheme }}-box-bg: #c8d0d8;
+			--{{ AppTheme }}-text: #334554;
+			--{{ AppTheme }}-bg: #f5f5f5;
+			--{{ AppTheme }}-shadow: rgba(0, 0, 0, 0.05);
+		}
+	</style>
+</head>
+<body>
+	<div id="hamburger-menu" class="modal">
+	    <div class="modal-content">
+	        <span class="close" id="closehamburger-menuBtn">&times;</span>
+	        <br>
+	        <h1>Menu</h1>
+	        <br>
+	        <p><a>Calculator</a></p>
+	        <br>
+	        <p><a href="https://davidnzube.vercel.app" style="color: var(--light-text); text-decoration: none;">About the developer</a></p>
+	        <br>
+	        <p><a href="/logout" style="color: var(--light-text); text-decoration: none;">Logout</a></p>
+	        <br>
+	        <br>
+	        <button class="standard-button switch-theme-button" onclick="switchMode();">{% if CurrentUser['app_theme'] == 'dark' %} Light {% else %} Dark {% endif %} Mode</button>
+	    </div>
+	</div>
+
+	<div id="modal-menu" class="modal">
+	    <div class="modal-content">
+	        <span class="close" id="closemodal-menuBtn">&times;</span>
+	        <br>
+	        <h1 class="modal-title">Menu</h1>
+	        
+	        <div class="modal-data" style="text-align: left;"></div>
+
+	        <button class="standard-button finish-add-to-record" onclick="submitData('/add-to-record');">Done</button>
+	        <p class="status-text" style="color: #ff0000d6;"></p>
+	    </div>
+	</div>
+
+
+	<div class="main">
+		<header>
+			<img src="{{ url_for('static', filename='media/App_Icons/icons8-xbox-menu-50.png') }}" id="hmg-trigger">
+			<h3>IMCMT</h3>
+			<h5>{{ CurrentDate }}</h5>
+		</header>
+
+		<div class="screen-container">
+			<div id="main-screen">
+				<h2 class="welcome-text">Welcome,<br>{{ CurrentUser['name'] }}</h2>
+
+				{% if CurrentUser['is_admin'] == 'False' %}
+					<p style="font-size: 18px;">View Collections, the Year's Report and announcments</p>
+
+					<div class="input-holder" style="border: 1px solid var(--dark-bg); border-radius: 0.5rem; opacity: 0.4;">
+						<input disabled class="BasicInputs" type="hidden" name="screen_id">
+						<input disabled class="BasicInputs" type="text" name="record_name" placeholder="Name">
+						<input disabled class="BasicInputs" type="text" name="record_amount" placeholder="Amount (NGN)">
+						<div style="display: flex; align-items: center; justify-content: center;">
+							<select disabled name="record_where" class="BasicInputs" style="width: 40%;">
+								<option value="cash">Cash</option>
+								<option value="bank">Bank</option>
+							</select>
+							
+							<select disabled name="record_for" class="BasicInputs" style="width: 40%;">
+								<option value="harvest_levy">Harvest Levy</option>
+								<option value="august_meeting">August Meeting</option>
+								<option value="annual_dues">Annual Dues</option>
+								<option value="donation">Donation</option>
+								<option value="other">Other</option>
+							</select>
+							
+						</div>
+						<textarea class="BasicInputs-textarea" type="text" name="record_description" placeholder="Description (Optional)" disabled></textarea>
+						<button class="standard-button" disabled>Add</button>
+					</div>
+
+				{% else %}
+
+					<!-- <form action="/add-to-record" method="POST"> -->
+					<input class="BasicInputs" type="hidden" id="screen_id" value="1">
+					<input class="BasicInputs" type="text" id="record_name" placeholder="Name">
+					<input class="BasicInputs" type="text" id="record_amount" placeholder="Amount (NGN)">
+					<div style="display: flex; align-items: center; justify-content: center;">
+						<select id="record_where" class="BasicInputs" style="width: 40%;">
+							<option value="cash">Cash</option>
+							<option value="bank">Bank</option>
+						</select>
+						
+						<select id="record_for" class="BasicInputs" style="width: 40%;">
+							<option value="harvest_levy">Harvest Levy</option>
+							<option value="august_meeting">August Meeting</option>
+							<option value="annual_dues">Annual Dues</option>
+							<option value="mothering_sunday">Mothering Sunday</option>
+							<option value="donation">Donation</option>
+							<option value="other">Other</option>
+						</select>
+						
+					</div>
+					<textarea class="BasicInputs-textarea" type="text" id="record_description" placeholder="Description (Optional)"></textarea>
+					<button class="standard-button add-record" onclick="askToSubmit('Add Record', 'Are you sure the following details are correct?');">Add</button>
+					<!-- </form> -->
+
+				{% endif %}
+			</div>
+
+			<div style="display: none;" id="collection-screen">
+				<h2 class="welcome-text">
+					Collections <!-- {{ Collections }} -->
+				</h2>
+
+				{% for name, details in Collections.items() %}
+
+					<div id="modal-menu-{{ name.replace(' ', '_').lower() }}" class="modal">
+					    <div class="modal-content"  style="height: 80%;">
+					        <span class="close" id="closemodal-menuBtn-{{ name.replace(' ', '_').lower() }}">&times;</span>
+					        <br>
+					        <h2 class="welcome-text">{{ name.replace("_", " ").capitalize() }}</h2>
+
+					        <div class="insights-box">
+					        	<div class="insights-box-left">
+						        	<h3>&#8358;{{ details }}</h3>
+						        	<p>Total Amount payed</p>
+					        	</div>
+					        </div>
+
+					        <!-- <p>--- paid <span style="background: var(--dark-bg); color: var(--light-bg); padding: 5px; border-radius: 0.5rem;">Recently</span></p> -->
+					        <br>
+					        <br>
+
+					        <a href="/view-collection-record/{{ name }}">
+					        	<span style="background: var(--dark-bg); color: var(--light-bg); padding: 5px; border-radius: 0.5rem;">View <b>{{ name.replace("_", " ").capitalize() }}</b> Records</span>
+					        </a>
+
+					        <br>
+					        <br>
+					        <div class="insights-box" style="display: block; text-align: left;">
+					        	<h4>Account Information</h4>
+					        	<p>ACCOUNT NAME: <b>Peace Madubuike</b></p>
+					        	<p>ACCOUNT BANK: <b>First Bank</b></p>
+					        	<p>ACCOUNT NUMBER: <b>3039083057</b></p>
+					        </div>
+						</div>
+					</div>
+
+					<div class="standard-horizontal-box" id="{{ name.replace(' ', '_').lower() }}" style="position: relative; height: 90px;">
+						<span style="position: absolute; top: 10; right: 10; background: var(--dark-bg); color: var(--light-bg); padding: 5px; border-radius: 0.5rem;">{{ CurrentYear }}</span>
+
+						<h2>{{ name.replace("_", " ").capitalize() }}</h2>
+						<!-- <p><b>Total</b>:  <i>{{ details }}</i></p> -->
+						<!-- <p><b>Recent:  </b><i>{{ details }}</i></p> -->
+						<!-- <p><b>Date:  </b><i>{{ details }}</i></p> -->
+
+					</div>
+
+					<script type="text/javascript">
+						collection_{{ name.replace(' ', '_').lower() }} = document.querySelector("#{{ name.replace(' ', '_').lower() }}")
+						modal_{{ name.replace(' ', '_').lower() }} = document.querySelector("#modal-menu-{{ name.replace(' ', '_').lower() }}")
+						closebutton_{{ name.replace(' ', '_').lower() }} = document.querySelector("#closemodal-menuBtn-{{ name.replace(' ', '_').lower() }}")
+
+						collection_{{ name.replace(' ', '_').lower() }}.addEventListener('click', ()=>{
+							modal_{{ name.replace(' ', '_').lower() }}.style.display = 'block'
+						})
+						closebutton_{{ name.replace(' ', '_').lower() }}.addEventListener('click', ()=>{
+							modal_{{ name.replace(' ', '_').lower() }}.style.display = 'none'
+
+						})
+
+					</script>
+					
+				{% endfor %}
+				<br>
+				<br>
+				<br>
+			</div>
+			
+			<div style="display: none;" id="profile-screen">
+				<h2 class="welcome-text">Profile</h2>
+
+				<p style="font-size: 18px;">Edit your profile details</p>
+				<form action="/edit-profile" method="POST">
+					<input type="hidden" name="screen_id" value="3">
+					<input type="text" name="user_name" value="{{ CurrentUser['name'] }}" class="BasicInputs">
+					<input type="text" name="user_gender" value="{{ CurrentUser['gender'] }}" class="BasicInputs">
+					<input type="email" name="user_email" value="{{ CurrentUser['email'] }}" class="BasicInputs">
+					<input type="password" name="user_password" placeholder="Leave empty if you do not wish to change" class="BasicInputs">
+
+					<button class="standard-button">Done</button>
+
+				</form>
+			</div>
+			
+			<div style="display: none;" id="year-report">
+				<h2 class="welcome-text">Year's Report<br>(2023)</h2>
+				<br>
+				<div class="standard-horizontal-box">
+					<h4 style="font-size: 25px;" class="welcome-text">Income</h4>
+					<p><b>Total Income</b>: <i>&#8358;463,000</i></p>
+					<hr>
+					<p><b>Balance Brought<br>Forward</b>: <i>&#8358;214,671</i></p>
+					<p><b>Less expenses</b>: <i>&#8358;340,800</i></p>
+					<p><b>Total Balance</b>: <i>&#8358;337,441</i></p>
+
+				</div>
+				<div class="standard-horizontal-box">
+					<h4 style="font-size: 25px;" class="welcome-text">Expenditure</h4>
+					<p><b>Total Expenses</b>: <i>&#8358;340,800</i></p>
+					<hr>
+					<p><b>Balance Brought<br>Forward</b>: <i>&#8358;214,671</i></p>
+					<p><b>Less expenses</b>: <i>&#8358;340,800</i></p>
+					<p><b>Total Balance</b>: <i>&#8358;337,441</i></p>
+				</div>
+
+				<br>
+				<br>
+
+				<div class="profit-loss" style="display: flex; align-items: center; justify-content: space-around;">
+					<h3 style="color: #0ba40b;">&blacktriangle; Profit (<b>&#8358; {{ 463,000 - 340,800 }}) <i>{{ PercentageProfitCalc(463000, 340000) }}%</i></b>) </h3>
+					<!-- <h3 style="color: #c10909;">&blacktriangledown; Loss (<b>&#8358; 30021</b>) </h3> -->
+				</div>
+
+				<br>
+				<br><br>
+				<br><br>
+				<br><br>
+				<br><br>
+				<br><br>
+				<br>
+			</div>
+		</div>
+
+		<div class="nav-bar" style="background: var(--light-bg);">
+			<img src="{{ url_for('static', filename='media/App_Icons/icons8-home-48.png') }}" id="home-trigger">
+			<img src="{{ url_for('static', filename='media/App_Icons/icons8-analytics-30.png') }}" id="collection-trigger">
+			<img src="{{ url_for('static', filename='media/App_Icons/icons8-user-48.png') }}" id="profile-trigger">
+			<div id="year-trigger">12</div>
+		</div>
+	</div>
+
+
+<script type="text/javascript">
+	current_screen = {{ ScreenID }}
+	hm_modal = document.querySelector("#hamburger-menu")
+	trigger_hm = document.querySelector("#hmg-trigger")
+	close_hm_modal = document.querySelector("#closehamburger-menuBtn")
+
+	trigger_hm.addEventListener('click', ()=>{
+		hm_modal.style.display = "block"
+	})
+	close_hm_modal.addEventListener('click', ()=>{
+		hm_modal.style.display = "none"
+	})
+
+	// Switching to light and dark modes
+	user_theme_preference = "{{ CurrentUser['app_theme'] }}"
+	console.log(`[INFO]: Current theme &#8358;{user_theme_preference}`)
+	function switchMode() {
+		document.querySelector(".switch-theme-button").innerHTML = "Switching"
+		fetch ("/change-app-theme", {
+			method: 'POST',
+			body: JSON.stringify({ current_app_theme: user_theme_preference }),
+		}).then((_res) => {
+			window.location.href = '/dashboard'
+		})
+	}
+</script>
+<script src="{{ url_for('static', filename='js/App.js') }}"></script>
+<script src="{{ url_for('static', filename='js/Screen-Manager.js') }}"></script>
+</body>
+</html>
+
+{% endblock %}

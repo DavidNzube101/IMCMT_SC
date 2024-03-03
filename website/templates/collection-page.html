@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %} Dashboard - {{ CollectionName.replace("_", " ").capitalize() }} - {{ CurrentUser['name'] }} {% endblock %}
+{% block content %}
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- <title></title> -->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard-style.css') }}">
+	<!-- <title></title> -->
+	<style type="text/css">
+		:root{
+			--{{ AppThemeOpposite }}-shadow: rgba(255, 255, 255, 0.05);
+			--{{ AppThemeOpposite }}-bg: #062239f7;
+			--{{ AppThemeOpposite }}-text: #efe9e9;
+			--{{ AppThemeOpposite }}-box-bg: #4c5f72;
+
+			--{{ AppTheme }}-box-bg: #c8d0d8;
+			--{{ AppTheme }}-text: #334554;
+			--{{ AppTheme }}-bg: #f5f5f5;
+			--{{ AppTheme }}-shadow: rgba(0, 0, 0, 0.05);
+		}
+	</style>
+</head>
+<body>
+	<div id="hamburger-menu" class="modal">
+	    <div class="modal-content">
+	        <span class="close" id="closehamburger-menuBtn">&times;</span>
+	        <br>
+	        <h1>Menu</h1>
+	        <br>
+	        <p><a>Calculator</a></p>
+	        <br>
+	        <p><a href="https://davidnzube.vercel.app" style="color: var(--light-text); text-decoration: none;">About the developer</a></p>
+	        <br>
+	        <p><a href="/logout" style="color: var(--light-text); text-decoration: none;">Logout</a></p>
+	        <br>
+	        <br>
+	        <button class="standard-button switch-theme-button" onclick="switchMode();">{% if CurrentUser['app_theme'] == 'dark' %} Light {% else %} Dark {% endif %} Mode</button>
+	    </div>
+	</div>
+
+
+	<div class="main">
+		<header>
+			<img src="{{ url_for('static', filename='media/App_Icons/icons8-xbox-menu-50.png') }}" id="hmg-trigger">
+			<h3>IMCMT</h3>
+			<h5>{{ CurrentDate }}</h5>
+		</header>
+
+		<h5 style="font-size: 23px;" class="welcome-text"><a href="/dashboard/2" style="color: inherit; text-decoration: underline;">Collection</a> > {{ CollectionName.replace("_", " ").capitalize() }}</h5>
+
+		<p style="background: var(--dark-bg); width: fit-content; color: var(--light-bg); padding: 5px; border-radius: 0.5rem;">Number of payers: <b>{{ NumberOfPayers }}</b></p>
+
+		{% if CollectionsInfo != [] %}
+			<ol>
+				{% for name, amount in CollectionsInfo.items() %}
+
+					<li>{{ name }} - {{ amount }}</li>
+
+				{% endfor %}
+			</ol>
+
+
+		{% else %}
+
+			<p>None for now</p>
+
+		{% endif %}
+		
+
+		<div class="nav-bar" style="background: var(--light-bg);">
+			<a class="back-to-dashboard-trigger" href="/dashboard/1"><img src="{{ url_for('static', filename='media/App_Icons/icons8-home-48.png') }}" id="home-trigger"></a>
+			<a class="back-to-dashboard-trigger" href="/dashboard/2"><img src="{{ url_for('static', filename='media/App_Icons/icons8-analytics-30.png') }}" id="collection-trigger"></a>
+			<a class="back-to-dashboard-trigger" href="/dashboard/3"><img src="{{ url_for('static', filename='media/App_Icons/icons8-user-48.png') }}" id="profile-trigger"></a>
+			<a class="back-to-dashboard-trigger" style="color: var(--light-text);" href="/dashboard/4"><div id="year-trigger">12</div></a>
+		</div>
+	</div>
+
+<script type="text/javascript">
+	current_screen = {{ ScreenID }}
+	hm_modal = document.querySelector("#hamburger-menu")
+	trigger_hm = document.querySelector("#hmg-trigger")
+	close_hm_modal = document.querySelector("#closehamburger-menuBtn")
+
+	trigger_hm.addEventListener('click', ()=>{
+		hm_modal.style.display = "block"
+	})
+	close_hm_modal.addEventListener('click', ()=>{
+		hm_modal.style.display = "none"
+	})
+
+	// Switching to light and dark modes
+	user_theme_preference = "{{ CurrentUser['app_theme'] }}"
+	console.log(`[INFO]: Current theme ${user_theme_preference}`)
+	function switchMode() {
+		document.querySelector(".switch-theme-button").innerHTML = "Switching"
+		fetch ("/change-app-theme", {
+			method: 'POST',
+			body: JSON.stringify({ current_app_theme: user_theme_preference }),
+		}).then((_res) => {
+			window.location.href = '/view-collection-record/{{ name }}'
+		})
+	}
+</script>
+</body>
+</html>
+
+
+
+{% endblock %}

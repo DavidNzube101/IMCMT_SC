@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %} Passkey - IMCMT {% endblock %}
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- <title></title> -->
+	<style type="text/css">
+		body{
+			display: grid;
+			place-items: center;
+/*			align-items: center;*/
+/*			justify-content: center;*/
+			background: linear-gradient(45deg, mediumpurple, skyblue);
+			color: #d5edee;
+		}
+		body div{
+			background: linear-gradient(to left, cadetblue, indigo);
+			aspect-ratio: 1/1;
+			border: 3px solid white;
+			width: 100px;
+			font-size: 30px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 10pc;
+		}
+		form{
+			display: grid;
+			place-items: center;
+		}
+		form input, form button{
+			padding: 10px;
+			border-radius: 1rem;
+			border: 0;
+			outline: none;
+			background: white;
+		}
+		form button{
+			background: black;
+			color: #d5edee;
+			margin: 10px;
+			width: 70%;
+		}
+	</style>
+</head>
+<body>
+	{% if info != "None": %}
+		<p style="position: fixed; top: 0; color: white; background: orangered; padding: 10px; border-radius: 0.5rem;">Wrong Password</p>
+	{% else %}
+		<p></p>
+	{% endif %}
+
+	<div>
+		IM
+	</div>
+	<form method="POST" action="/verify-church-passkey">
+		<h3 style="text-decoration: underline;">Passkey</h3>
+		<input type="password" maxlength="6" name="passkey">
+		<button>Sumbit</button>
+	</form>
+	<br>
+	
+</body>
+</html>
+
+{% endblock %}

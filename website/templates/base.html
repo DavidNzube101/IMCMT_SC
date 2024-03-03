@@ -1,0 +1,71 @@
+
+<title>{% block title %} IMCMT {% endblock %}</title>
+
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="icon" href="{{ url_for('static', filename='media/App-Logo.png') }}">
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+  {% for category, message in messages %}
+    {% if category == 'Error occurred' %}
+      <div id="modal" class="modal">
+          <div class="modal-content">
+              <span class="close" id="closeModalBtn">&times;</span>
+              <h2>{{ category }}</h2>
+              <p>{{ message }}</p>
+          </div>
+      </div>
+    {% else %}
+      <div id="modal" class="modal">
+          <div class="modal-content">
+              <span class="close" id="closeModalBtn">&times;</span>
+              <h2>{{ category }}</h2>
+              <p>{{ message }}</p>
+          </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+{% endif %}
+{% endwith %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+{% block content %}
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body style="background: linear-gradient(45deg, mediumpurple, skyblue);">
+  <div class="landing-page">
+    <header>
+      <div class="container">
+        <a href="#" class="logo">IMCMT</a>
+        
+      </div>
+    </header>
+    <div class="content" style="display: grid; place-items: center;">
+      <div class="container">
+        <div class="info">
+          <h2>IMMANUEL CHURCH<br>MANAGEMENT TOOL.</h2>
+          <p>
+            LAGOS BRANCH • WOMEN'S WING
+      </p>
+          <a href="/login"><button>Login</button></a>
+          <a href="/verify-church-passkey"><button>Create Account</button></a>
+        </div>
+      </div>
+    
+    <ul class="links">
+      <a href="http://davidnzube.vercel.app"><li>About Developer</li></a>
+      <!-- <a href="/signup"><li>Get Started</li></a> -->
+    </ul>
+    </div>
+
+  </div>
+</body>
+</html>
+{% endblock %}
+		
