@@ -232,7 +232,7 @@
 				<br>
 
 				<div class="profit-loss" style="display: flex; align-items: center; justify-content: space-around;">
-					<h3 style="color: #0ba40b;">&blacktriangle; Profit (<b>&#8358; {{ 463,000 - 340,800 }}) <i>{{ PercentageProfitCalc(463000, 340000) }}%</i></b>) </h3>
+					<h3 style="color: #0ba40b;">&blacktriangle; <b>&#8358;{{ 463000 - 340800 }} <hr><br> <b  style="text-align: center; font-size: 27px;">+{{ PercentageProfitCalc(463000, 340000) }}%</b></b> </h3>
 					<!-- <h3 style="color: #c10909;">&blacktriangledown; Loss (<b>&#8358; 30021</b>) </h3> -->
 				</div>
 
@@ -270,7 +270,7 @@
 
 	// Switching to light and dark modes
 	user_theme_preference = "{{ CurrentUser['app_theme'] }}"
-	console.log(`[INFO]: Current theme &#8358;{user_theme_preference}`)
+	console.log(`[INFO]: Current theme ${user_theme_preference}`)
 	function switchMode() {
 		document.querySelector(".switch-theme-button").innerHTML = "Switching"
 		fetch ("/change-app-theme", {
