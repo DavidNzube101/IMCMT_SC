@@ -5,8 +5,8 @@ from . import encrypt
 
 VXD_INFO = ((__trash.retTr()))
 
-from_ = "http://127.0.0.1:2781"
-# from_ = "https://vertexxdb.pythonanywhere.com"
+# from_ = "http://127.0.0.1:2781"
+from_ = "https://vertexxdb.pythonanywhere.com"
 
 # link_prefix = f"{from_}/handler/OPERATION/{VXD_INFO}/INFO-TO-RETIRIEVE-FROM-?"
 
@@ -18,7 +18,7 @@ try:
 	def request_then_text(url):
 		req = requests.get(url)
 		return req.text
-
+	# print(eval(request_then_text(url=f'{from_}/handler/get-all/{VXD_INFO}/USER')))
 	class dbORM:
 		"""docstring for dbORM"""
 		def __init__(self):
@@ -30,6 +30,7 @@ try:
 		def get_all(table):
 			table = table
 			# connect()
+
 			return eval(request_then_text(url=f'{from_}/handler/get-all/{VXD_INFO}/{table}'))
 
 		def find_all(table, column, value):

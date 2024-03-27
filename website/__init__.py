@@ -9,15 +9,9 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from .VertexClient import dbORM
 
 
-db = SQLAlchemy()
-DB_NAME = "Database.db"
-
 def initialize_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'akmkakddopeaceaksmdak2223#'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///Database.db'
-
-    db.init_app(app)
 
     from .views import views
     from .auth import auth
@@ -25,9 +19,7 @@ def initialize_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
-    from .models import User
-
-    create_db(app)
+    # from .models import User
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
@@ -152,7 +144,7 @@ def initialize_app():
                 }
 
                 # for key, details in new_user.items():
-                dbORM.add_entry("USER", f"{encrypter(str(new_user))}")
+                dbORM.add_entry("USER", f"{str(new_user)}")
 
                 flash('Account created successfully.', category='Success')
 
@@ -165,12 +157,5 @@ def initialize_app():
         return render_template("signup.html")
 
     return app
-
-def create_db(the_app):
-    db_path = os.path.join(os.path.dirname(__file__), DB_NAME)
-    if not isfile(db_path):
-        with the_app.app_context():
-            db.create_all()
-        print("Database created!")
 
     

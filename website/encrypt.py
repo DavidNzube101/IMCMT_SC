@@ -86,7 +86,8 @@ defs = {
 	">" : "&lt;",
 	"\n": "&nl;",
 	"\t": "&tbsp;",
-	"`": "&bctk;"
+	"`": "&bctk;",
+	"!": "&ecm;"
 }
 for n in list(range(1000)):
 	defs[f"{n}"] = f"&&{n};"

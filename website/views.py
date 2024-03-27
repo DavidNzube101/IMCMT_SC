@@ -6,9 +6,9 @@ import random
 from flask_login import login_required, current_user
 from sqlalchemy.sql import func  # Import the 'func' module
 import json
-from .models import User
+# from .models import User
 from werkzeug.security import generate_password_hash
-from . import db
+# from . import db
 
 from datetime import datetime
 import datetime as dt
@@ -164,7 +164,7 @@ def addToRecord():
     'datestamp': f'{current_date}'
   }
 
-  dbORM.add_entry("Record", f"{encrypt.encrypter(str(_))}")
+  dbORM.add_entry("Record", f"{str(_)}")
 
   return go_to(screen_id=data_pack['screen'])
 
@@ -202,7 +202,7 @@ def showCollection(collection_name):
     for key, value in Record.items():
       if the_collection != "NULL":
         if the_collection == value["_for"]:
-          collections[value['name']] = value['amount']
+          collections[value['name']] = [value['amount'], value['datestamp'], value['timestamp']]
         # else:
         #   collections.append(value['name'])
 
